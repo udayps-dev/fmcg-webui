@@ -31,7 +31,7 @@ const getDbfData = (path) => {
 }
 
 const getCmplData = async (req, res) => {
-    const dbfFilePath = path.join('./software/d01-2324/data', 'CMPL.dbf');
+    const dbfFilePath = path.join('./d01-2324/data', 'CMPL.dbf');
     try {
         const jsonData = await getDbfData(dbfFilePath);
         res.json(jsonData);
@@ -62,7 +62,7 @@ app.get('/dbf/:file', async (req, res) => {
     let { file } = req.params;
     
     try {
-        let dbfFiles = await getDbfData(path.join('./software/d01-2324/data', file));
+        let dbfFiles = await getDbfData(path.join('./d01-2324/data', file));
         res.render('pages/db/dbf', { dbfFiles , name: file, file: file});
         // res.json(dbfFile);
     } catch (error) {
@@ -73,7 +73,7 @@ app.get('/dbf/:file', async (req, res) => {
 
 app.get('/dbf', async (req, res) => {
     try {
-        const files = await fs.readdir('./software/d01-2324/data');
+        const files = await fs.readdir('./d01-2324/data');
         // Filter out non-DBF files and create index key 1,2,3
         let dbfFiles = files.filter(file => file.endsWith('.dbf') || file.endsWith('.DBF')).map((file, index) => ({ name: file }));
         res.render('pages/db/dbf', { dbfFiles , name: 'DBF Files', file: 'dbf-files'});
@@ -319,8 +319,6 @@ app.get('/db/:file', async (req, res) => {
         res.status(500).send('Server error');
     }
 });
-
-
 
 
 
