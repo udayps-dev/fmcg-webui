@@ -1,0 +1,30 @@
+[
+  {
+    "date": "2024-03-08",
+    "receiptNo": "1",
+    "party": "AA001",
+    "amount": "20",
+    "discount": ""
+  },
+  {
+    "date": "2024-03-08",
+    "receiptNo": "2",
+    "party": "AA001",
+    "amount": "100",
+    "discount": ""
+  },
+  {
+    "date": "2024-03-08",
+    "receiptNo": "3",
+    "party": "AA001",
+    "amount": "40",
+    "discount": "0"
+  },
+  {
+    "date": "2024-03-08",
+    "receiptNo": "4",
+    "party": "AA001",
+    "amount": "15",
+    "discount": "0"
+  }
+]
