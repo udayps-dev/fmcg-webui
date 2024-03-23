@@ -31,7 +31,8 @@ const getDbfData = (path) => {
 }
 
 const getCmplData = async (req, res) => {
-    const dbfFilePath = path.join('./d01-2324/data', 'CMPL.dbf');
+    const dbfFilePath = path.join(__dirname, "..",'d01-2324/data', 'CMPL.dbf');
+    console.log(dbfFilePath);
     try {
         const jsonData = await getDbfData(dbfFilePath);
         res.json(jsonData);
@@ -62,7 +63,7 @@ app.get('/dbf/:file', async (req, res) => {
     let { file } = req.params;
     
     try {
-        let dbfFiles = await getDbfData(path.join('./d01-2324/data', file));
+        let dbfFiles = await getDbfData(path.join("..",'d01-2324",data'), file);
         res.render('pages/db/dbf', { dbfFiles , name: file, file: file});
         // res.json(dbfFile);
     } catch (error) {
@@ -73,7 +74,7 @@ app.get('/dbf/:file', async (req, res) => {
 
 app.get('/dbf', async (req, res) => {
     try {
-        const files = await fs.readdir('./d01-2324/data');
+        const files = await fs.readdir(path.join("../",'./d01-2324/data'));
         // Filter out non-DBF files and create index key 1,2,3
         let dbfFiles = files.filter(file => file.endsWith('.dbf') || file.endsWith('.DBF')).map((file, index) => ({ name: file }));
         res.render('pages/db/dbf', { dbfFiles , name: 'DBF Files', file: 'dbf-files'});
@@ -215,6 +216,7 @@ app.post('/edit/:formType', async (req, res) => {
     const formData = req.body;
 
     if (formData.party && typeof formData.party === 'string') {
+        console.log(formData)
         formData.party = JSON.parse(formData.party)[0].value;
     }
     
@@ -232,7 +234,6 @@ app.post('/edit/:formType', async (req, res) => {
             await fs.writeFile(filePath, JSON.stringify(dbData, null, 2), 'utf8');
             res.status(200).send('Entry updated successfully. ' + redirect(`/db/${formType}`, 500));
         } else {
-            
             res.status(404).send(`Error: Entry with specified receiptNo does not exist. <br> ${JSON.stringify(formData)} <br> ${entryIndex} <br> ${dbData.length}`);
         }
     } catch (err) {
@@ -349,5 +350,9 @@ process.on('uncaughtException', (err) => {
 process.on('unhandledRejection', (reason, promise) => {
     console.error('Unhandled Rejection at:', promise, 'reason:', reason);
 });
+
+
+
+
 
 
