@@ -35,12 +35,26 @@ const getCmplData = async (req, res) => {
     console.log(dbfFilePath);
     try {
         const jsonData = await getDbfData(dbfFilePath);
-        res.json(jsonData);
+        if (req === "99") return jsonData; else res.json(jsonData);
     } catch (error) {
         res.status(500).send(error);
     }
 };
 
+const getSubGroup = async (req, res) => {
+    const cmpl = await getCmplData("99");
+    let cmpldata = cmpl.map((x)=> {
+        return {
+            "M_GROUP"   : x.M_GROUP,
+            "M_NAME"    : x.M_NAME,
+            "PARTY_MAP" : x.PARTY_MAP,
+            "C_CODE"    : x.C_CODE,
+            "C_NAME"    : x.C_NAME,
+        }
+    });
+    cmpldata = cmpl.filter((x)=>{x.C_CODE.endsWith("000")});
+    
+}
 
 
 // Endpoint to get data from CMPL.DBF and return as JSON
@@ -63,7 +77,7 @@ app.get('/dbf/:file', async (req, res) => {
     let { file } = req.params;
     
     try {
-        let dbfFiles = await getDbfData(path.join("..",'d01-2324",data'), file);
+        let dbfFiles = await getDbfData(path.join(__dirname,"..",'d01-2324','data', file));
         res.render('pages/db/dbf', { dbfFiles , name: file, file: file});
         // res.json(dbfFile);
     } catch (error) {

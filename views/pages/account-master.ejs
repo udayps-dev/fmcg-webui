@@ -125,20 +125,32 @@
             title: user.C_NAME,
             email: user.C_CODE,
             Email: user.C_CODE,
-            value: user.C_CODE,
+            value: user.C_CODE.substring(0, 2),
             avatar: "/assets/img/avatars/3.png"
          }));
 
+         function getNextSubgroupCode(data, subGroup) {
+            const subgroupData = data.filter(item => item.C_CODE.substring(0, 2) === subGroup);
+            if (subgroupData.length === 0) {
+               return `${subGroup}001`; // Start with the first code if none exist
+            }
+            const numbers = subgroupData.map(item => parseInt(item.C_CODE.match(/\d+/)[0], 10));
+            const nextNumber = Math.max(...numbers) + 1;
+            return `${subGroup}${String(nextNumber).padStart(3, '0')}`; 
+         }
 
-
-
+         usersList = usersList.filter(user => user.email.endsWith("000"));
          usersList = usersList.filter(user => user.name && user.email);
-         usersList = usersList.slice(2);
+         usersList.sort((a, b) => a.email.localeCompare(b.email));
 
-         // just keep the keys name,title,email,Email,avatar from each obj in userlist
+         // replace email to getNextSubgroupCode
+         usersList = usersList.map(user => ({
+            ...user,
+            email: user.value+" | "+getNextSubgroupCode(json, user.value)
+         }));
 
 
-         const TagifyUserListEl = document.querySelector("#party");
+         const TagifyUserListEl = document.querySelector("#sub-group");
 
 
          function tagTemplate(tagData) {
