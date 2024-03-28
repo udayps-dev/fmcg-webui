@@ -5,7 +5,8 @@ const path = require('path');
 const app = express();
 const PORT = 80;
 const spawn = require('child_process').spawn;
-app.use(express.static('./node_modules/public'));
+// app.use(express.static('./node_modules/public'));
+app.use(express.static('./public'));
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
